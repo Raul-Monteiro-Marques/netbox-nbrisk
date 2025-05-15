@@ -36,6 +36,9 @@ class ThreatSource(NetBoxModel):
     def get_absolute_url(self):
         return reverse("plugins:nb_risk:threatsource", args=[self.pk])
 
+    class Meta:
+        ordering = ('name',)
+
 
 # Vulnerability Model
 
@@ -78,10 +81,11 @@ class Vulnerability(NetBoxModel):
     class Meta:
         verbose_name = "Vulnerability"
         verbose_name_plural = "Vulnerabilities"
+        ordering = ('name',)
         constraints = (
             models.UniqueConstraint(
                 Lower('name'),
-                 name="unique_vuln_name"
+                name="unique_vuln_name"
             ),
         )
 
@@ -118,6 +122,7 @@ class VulnerabilityAssignment(NetBoxModel):
         return f"{self.asset} - {self.vulnerability.name}"
    
     class Meta:
+        ordering = ('vulnerability__name',)
         constraints = (
             models.UniqueConstraint(
                 fields=("asset_object_type", "asset_id", "vulnerability"),
@@ -167,6 +172,9 @@ class ThreatEvent(NetBoxModel):
 
     def get_absolute_url(self):
         return reverse("plugins:nb_risk:threatevent", args=[self.pk])
+
+    class Meta:
+        ordering = ('name',)
 
 
 # Risk Model
@@ -239,12 +247,15 @@ class Risk(NetBoxModel):
     def get_absolute_url(self):
         return reverse("plugins:nb_risk:risk", args=[self.pk])
 
+    class Meta:
+        ordering = ('name',)
+
 
 # Control Model
 
 class Control(NetBoxModel):
 
-    name = name = models.CharField("Name", max_length=100, unique=True)
+    name = models.CharField("Name", max_length=100, unique=True)
     description = models.CharField("Description", max_length=100, blank=True)
     notes = models.TextField("Notes", blank=True)
     category = models.CharField(
@@ -254,8 +265,8 @@ class Control(NetBoxModel):
         default=choices.ControlCategoryChoices.CATEGORY_1,
     )
     risk = models.ManyToManyField(
-        Risk,
-        verbose_name="Risks",
+        to=Risk,
+        related_name="controls",
         blank=True,
     )
 
@@ -264,3 +275,6 @@ class Control(NetBoxModel):
 
     def get_absolute_url(self):
         return reverse("plugins:nb_risk:control", args=[self.pk])
+        
+    class Meta:
+        ordering = ('name',)

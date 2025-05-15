@@ -30,9 +30,11 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/renatoalmeidaoliveira/nbrisk',
-    author='Renato Almdida Oliveira',
+    author='Renato Almeida Oliveira',
     author_email='renato.almeida.oliveira@gmail.com',
-    install_requires=[],
+    install_requires=[
+        'packaging',
+    ],
     packages=find_packages(),
     include_package_data=True,
     classifiers=[

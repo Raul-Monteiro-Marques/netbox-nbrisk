@@ -4,7 +4,7 @@
 
 ## Compatibility
 
-This plugin in compatible with [NetBox](https://netbox.readthedocs.org/) 3.4.0 and later.
+This plugin is compatible with [NetBox](https://netbox.readthedocs.org/) 3.4.0 and later, including the latest 4.3.x releases.
 
 ## Installation
 
@@ -23,13 +23,17 @@ To ensure NBRisk plugin is automatically re-installed during future upgrades, cr
 ```shell
 # echo "NbRisk==35.1.*" >> local_requirements.txt 
 ```
-### For NetBox 4.0.0 or grater
+### For NetBox 4.0.0 to 4.0.x
 ```shell
 # echo "NbRisk==40.0.*" >> local_requirements.txt 
 ```
-### For NetBox 4.1.0 or grater
+### For NetBox 4.1.0 to 4.1.x
 ```shell
 # echo "NbRisk==41.0.*" >> local_requirements.txt 
+```
+### For NetBox 4.3.0 or later
+```shell
+# echo "NbRisk==43.0.*" >> local_requirements.txt 
 ```
 
 Before installing NBRisk make sure your NetBox instance is already installed with all migrations executed.

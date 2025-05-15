@@ -8,7 +8,7 @@ NETBOX_CURRENT_VERSION = version.parse(settings.VERSION)
 
 def create_button(model_name):
     class Button(PluginTemplateExtension):
-        model = model_name
+        models = [model_name]
 
         def buttons(self):
             return self.render("nb_risk/vulnerability_assignment_button.html")

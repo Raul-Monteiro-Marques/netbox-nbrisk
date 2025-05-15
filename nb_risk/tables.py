@@ -17,6 +17,7 @@ class ThreatSourceTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = models.ThreatSource
         fields = ["name", "threat_type", "capability", "intent", "targeting"]
+        default_columns = ["name", "threat_type", "capability", "intent"]
 
 
 # ThreatEvent Tables
@@ -29,6 +30,7 @@ class ThreatEventTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = models.ThreatEvent
         fields = ["name", "threat_source", "relevance", "likelihood", "impact"]
+        default_columns = ["name", "threat_source", "relevance", "likelihood"]
 
 
 # Vulnerability Tables
@@ -56,6 +58,7 @@ class VulnerabilityTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = models.Vulnerability
         fields = ["name", "cve", "description", "affected", "cvssbaseScore"]
+        default_columns = ["name", "cve", "description", "affected"]
 
 
 # VulnerabilityAssignment Tables
@@ -69,6 +72,7 @@ class VulnerabilityAssignmentTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = models.VulnerabilityAssignment
         fields = ["vulnerability", "vulnerability__cve", "vulnerability__description"]
+        default_columns = ["vulnerability", "vulnerability__cve"]
 
 
 class VulnerabilityAssignmentListTable(NetBoxTable):
@@ -82,21 +86,22 @@ class VulnerabilityAssignmentListTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = models.VulnerabilityAssignment
         fields = ["asset", "asset_object_type"]
+        default_columns = ["asset", "asset_object_type"]
 
 class VulnerabilityAssignmentListViewTable(NetBoxTable):
     
-        actions = columns.ActionsColumn(actions=("delete",))
+    actions = columns.ActionsColumn(actions=("delete",))
 
-        vulnerability = tables.Column(linkify=True)
+    vulnerability = tables.Column(linkify=True)
     
-        asset = tables.Column(linkify=True)
+    asset = tables.Column(linkify=True)
     
-        asset_object_type = tables.Column(verbose_name="Asset Type")
+    asset_object_type = tables.Column(verbose_name="Asset Type")
     
-        class Meta(NetBoxTable.Meta):
-            model = models.VulnerabilityAssignment
-            fields = ["asset", "asset_object_type", "vulnerability", "vulnerability__cve", ]
-            default_columns = ('pk', 'asset', "vulnerability")
+    class Meta(NetBoxTable.Meta):
+        model = models.VulnerabilityAssignment
+        fields = ["asset", "asset_object_type", "vulnerability", "vulnerability__cve", ]
+        default_columns = ['pk', 'asset', "vulnerability"]
 
 class VulnerabilityExploitListTable(NetBoxTable):
 
@@ -110,6 +115,7 @@ class VulnerabilityExploitListTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = models.VulnerabilityAssignment
         fields = ["asset", "vulnerability", "asset_object_type"]
+        default_columns = ["asset", "vulnerability", "asset_object_type"]
 
 
 # Risk Tables
@@ -126,6 +132,7 @@ class RiskTable(NetBoxTable):
     class Meta(NetBoxTable.Meta):
         model = models.Risk
         fields = ["name", "threat_event", "likelihood", "impact", "risk_level"]
+        default_columns = ["name", "threat_event", "likelihood", "impact", "risk_level"]
 
 
 # CVE Tables
@@ -146,12 +153,16 @@ class CveTable(NetBoxTable):
                   "accessVector", 
                   "create"
                   ]
+        default_columns = ["id", "description", "accessVector", "create"]
 
 
 # Control Tables
 
 class ControlTable(NetBoxTable):
     name = tables.Column(linkify=True)
+    category = tables.Column(verbose_name="Category")
+    
     class Meta(NetBoxTable.Meta):
         model = models.Control
-        fields = ["name",]
+        fields = ["name", "category", "description"]
+        default_columns = ["name", "category", "description"]

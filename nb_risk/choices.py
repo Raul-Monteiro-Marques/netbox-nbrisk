@@ -1,5 +1,5 @@
 from django.db.models import Q
-from utilities.choices import ChoiceSet
+from netbox.choices import ChoiceSet
 
 # Define a set of choices for the Threat Type
 class ThreatTypeChoices(ChoiceSet):
@@ -102,6 +102,7 @@ class ImpactChoices(ChoiceSet):
 AssetTypes = Q(
     Q(app_label="dcim", model="device")
     | Q(app_label="virtualization", model="virtualmachine")
+    | Q(app_label="dcim", model="location")  # Adicionado location como substituto de site
 )
 
 # Define Level of Risk Choices

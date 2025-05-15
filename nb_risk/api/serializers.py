@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from django.contrib.contenttypes.models import ContentType
 from netbox.api.fields import ChoiceField, ContentTypeField, SerializedPKRelatedField
-from utilities.api import get_serializer_for_model
-
+from netbox.api.utils import get_serializer_for_model
 
 from netbox.api.serializers import NetBoxModelSerializer
 
@@ -139,7 +138,8 @@ class RiskSerializer(NetBoxModelSerializer):
     display = serializers.SerializerMethodField('get_display')
     
     threat_event = serializers.SlugRelatedField(slug_field="name", queryset=models.ThreatEvent.objects.all())
-
+    likelihood = ChoiceField(choices=choices.LikelihoodChoices)
+    impact = ChoiceField(choices=choices.ImpactChoices)
    
     def get_display(self, obj):
         return obj.name
@@ -162,10 +162,20 @@ class RiskSerializer(NetBoxModelSerializer):
 class ControlSerializer(NetBoxModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name="plugins-api:nb_risk-api:control-detail")
     display = serializers.SerializerMethodField('get_display')
-    risk = RiskSerializer(many=True,required=False, allow_null=True, nested=True)
+    risk = serializers.SerializerMethodField('get_risk')
+    category = ChoiceField(choices=choices.ControlCategoryChoices)
 
     def get_display(self, obj):
         return obj.name
+    
+    def get_risk(self, obj):
+        return [
+            {
+                'id': risk.id,
+                'display': risk.name,
+                'url': self.context['request'].build_absolute_uri(risk.get_absolute_url())
+            } for risk in obj.risk.all()
+        ]
     
     class Meta:
         model = models.Control
@@ -176,5 +186,6 @@ class ControlSerializer(NetBoxModelSerializer):
             "name",
             "description",
             "notes",
+            "category",
             "risk"
         ]
