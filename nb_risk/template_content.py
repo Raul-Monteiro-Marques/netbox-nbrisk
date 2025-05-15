@@ -3,7 +3,10 @@ from netbox.plugins.utils import get_plugin_config
 from django.conf import settings
 from packaging import version
 
-NETBOX_CURRENT_VERSION = version.parse(settings.VERSION)
+# Extract only the base version (e.g., '4.3.1' from '4.3.1-Docker-3.3.0')
+raw_version = settings.VERSION
+base_version_str = raw_version.split('-')[0]
+NETBOX_CURRENT_VERSION = version.parse(base_version_str)
 
 
 def create_button(model_name):
