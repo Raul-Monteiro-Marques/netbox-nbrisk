@@ -72,9 +72,9 @@ class ThreatSourceBulkEditForm(NetBoxModelBulkEditForm):
 
 class ThreatEventForm(NetBoxModelForm):
 
-    vulnerability = DynamicModelMultipleChoiceField(
+    vulnerabilities = DynamicModelMultipleChoiceField(
         queryset=models.VulnerabilityAssignment.objects.all(),
-        required=True,
+        required=False,
     )
 
     class Meta:
@@ -87,7 +87,7 @@ class ThreatEventForm(NetBoxModelForm):
             "relevance",
             "likelihood",
             "impact",
-            "vulnerability",
+            "vulnerabilities",
         ]
 
 
@@ -101,7 +101,7 @@ class ThreatEventFilterForm(NetBoxModelFilterSetForm):
             "relevance",
             "likelihood",
             "impact",
-            "vulnerability",
+            "vulnerabilities",
         ]
 
 
