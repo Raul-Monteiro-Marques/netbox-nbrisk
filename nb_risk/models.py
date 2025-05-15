@@ -67,7 +67,7 @@ class Vulnerability(NetBoxModel):
     cvssavailabilityImpact = models.CharField(
         "Availability Impact (A)", max_length=100, blank=True
     )
-    cvssbaseScore = models.FloatField("Base Score", max_length=100, blank=True, null=True,)
+    cvssbaseScore = models.FloatField("Base Score", blank=True, null=True)
 
     def affected_assets(self):
         return self.vulnerability_assignments.count()
@@ -90,7 +90,7 @@ class Vulnerability(NetBoxModel):
         )
 
 
-# VulnearbilityAssingment Model
+# VulnerabilityAssignment Model
 
 
 class VulnerabilityAssignment(NetBoxModel):
@@ -159,12 +159,18 @@ class ThreatEvent(NetBoxModel):
         choices=choices.LikelihoodChoices,
         default=choices.LikelihoodChoices.LIKELIHOOD_1,
     )
-    impact = models.CharField("Impact", max_length=100, unique=True)
+    impact = models.CharField(
+        "Impact", 
+        max_length=100,
+        choices=choices.ImpactChoices,
+        default=choices.ImpactChoices.IMPACT_1
+    )
 
-    vulnerability = models.ManyToManyField(
+    vulnerabilities = models.ManyToManyField(
         to=VulnerabilityAssignment,
         related_name="threat_events",
         blank=True,
+        verbose_name="Vulnerabilities"
     )
 
     def __str__(self):
@@ -268,6 +274,7 @@ class Control(NetBoxModel):
         to=Risk,
         related_name="controls",
         blank=True,
+        verbose_name="Risks"
     )
 
     def __str__(self):
