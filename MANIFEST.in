@@ -1,1 +1,5 @@
 recursive-include nb_risk/templates *.html
+recursive-include nb_risk/static *
+recursive-include nb_risk/migrations *
+include LICENSE
+include README.md

@@ -24,22 +24,34 @@ def get_version(rel_path):
 
 
 setup(
-    name='NbRisk',
+    name='netbox-nbrisk',
     version=get_version('nb_risk/version.py'),
     description='NIST 800-30 Risk Management for Netbox',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://github.com/renatoalmeidaoliveira/nbrisk',
-    author='Renato Almeida Oliveira',
+    url='https://github.com/Raul-Monteiro-Marques/netbox-nbrisk',
+    author='Renato Almeida Oliveira, Raul Monteiro Marques',
     author_email='renato.almeida.oliveira@gmail.com',
     install_requires=[
         'packaging',
     ],
     packages=find_packages(),
     include_package_data=True,
+    package_data={
+        'nb_risk': [
+            'templates/*',
+            'migrations/*',
+        ],
+    },
+    zip_safe=False,
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Framework :: Django',
         'Programming Language :: Python :: 3',
-    ]
+    ],
+    entry_points={
+        'netbox_plugins': [
+            'nb_risk=nb_risk:NbriskConfig',
+        ],
+    },
 )
