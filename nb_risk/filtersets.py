@@ -18,7 +18,7 @@ class ThreatSourceFilterSet(NetBoxModelFilterSet):
 class ThreatEventFilterSet(NetBoxModelFilterSet):
     class Meta:
         model = models.ThreatEvent
-        fields = ["threat_source", "relevance", "likelihood", "impact"]
+        fields = ["threat_source", "relevance", "likelihood", "impact", "vulnerabilities"]
 
 
 # Vulnerability Filters

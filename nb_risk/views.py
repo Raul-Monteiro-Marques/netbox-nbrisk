@@ -67,13 +67,13 @@ class ThreatEventView(generic.ObjectView):
 @register_model_view(models.ThreatEvent, name='vulnerabilities')
 class ThreatEventVulnerabilityView(generic.ObjectChildrenView):
     queryset = models.ThreatEvent.objects.all()
-    child_model = models.Vulnerability
+    child_model = models.VulnerabilityAssignment
     table = tables.VulnerabilityExploitListTable
     template_name = "nb_risk/threatevent_vulnerabilities.html"
-    tab = ViewTab(label='Exploit Vulnerabilities', badge=lambda obj: obj.vulnerability.all().count(), hide_if_empty=True)
+    tab = ViewTab(label='Exploit Vulnerabilities', badge=lambda obj: obj.vulnerabilities.all().count(), hide_if_empty=True)
 
     def get_children(self, request, parent):
-            childrens = parent.vulnerability.all()
+            childrens = parent.vulnerabilities.all()
             return childrens
 
 
@@ -108,7 +108,7 @@ class VulnerabilityView(generic.ObjectView):
 @register_model_view(models.Vulnerability, name='affected_assets')
 class VulnerabilityAffectedAssetsView(generic.ObjectChildrenView):
     queryset = models.Vulnerability.objects.all()
-    child_model = models.Vulnerability
+    child_model = models.VulnerabilityAssignment
     table = tables.VulnerabilityAssignmentListTable
     template_name = "nb_risk/vulnerability_affected_assets.html"
     tab = ViewTab(label='Affected Assets', badge=lambda obj: models.VulnerabilityAssignment.objects.filter(vulnerability=obj).count(), hide_if_empty=True)
@@ -250,14 +250,13 @@ class VulnerabilityAssignmentImportView(generic.BulkImportView):
         if object_form.cleaned_data["ip_address"] is not None:
             ip_address = object_form.cleaned_data["ip_address"]
             parent = ip_address.assigned_object.parent_object
-            vulnAssingment = models.VulnerabilityAssignment(
+            vuln_assignment = models.VulnerabilityAssignment(
                 vulnerability=object_form.cleaned_data["vulnerability"],
                 asset = parent,
             )
-            vulnAssingment.full_clean()
-            vulnAssingment.save()
-            return vulnAssingment                        
-
+            vuln_assignment.full_clean()
+            vuln_assignment.save()
+            return vuln_assignment
 
         return object_form.save()
 
