@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.contenttypes.models import ContentType
 from netbox.api.fields import ChoiceField, ContentTypeField, SerializedPKRelatedField
-from netbox.api.utils import get_serializer_for_model
+from netbox.api.serializers.generic import get_serializer_for_model
 
 from netbox.api.serializers import NetBoxModelSerializer
 
@@ -41,7 +41,7 @@ class ThreatEventSerializer(NetBoxModelSerializer):
     threat_source = serializers.SlugRelatedField(slug_field="name", queryset=models.ThreatSource.objects.all())
     relevance = ChoiceField(choices=choices.RelevanceChoices)
     likelihood = ChoiceField(choices=choices.LikelihoodChoices)
-
+    impact = ChoiceField(choices=choices.ImpactChoices)
 
     def get_display(self, obj):
         return obj.name
@@ -57,7 +57,7 @@ class ThreatEventSerializer(NetBoxModelSerializer):
             "relevance",
             "likelihood",
             "impact",
-            "vulnerability",
+            "vulnerabilities",
         ]
 
         brief_fields = ['id', 'url', 'display', 'name', 'description']
